@@ -1,0 +1,55 @@
+---
+sidebar: sidebar 
+permalink: scpivs44_mount_a_backup.html 
+keywords:  
+summary: Você pode montar um datastore tradicional a partir de um backup se quiser acessar arquivos no backup. Você pode montar o backup no mesmo host ESXi em que o backup foi criado ou em um host ESXi alternativo que tenha o mesmo tipo de VM e configurações de host. Você pode montar um datastore várias vezes em um host. 
+---
+= Monte uma cópia de segurança
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você pode montar um datastore tradicional a partir de um backup se quiser acessar arquivos no backup. Você pode montar o backup no mesmo host ESXi em que o backup foi criado ou em um host ESXi alternativo que tenha o mesmo tipo de VM e configurações de host. Você pode montar um datastore várias vezes em um host.
+
+Não é possível montar um datastore vVol.
+
+.Antes de começar
+* Verifique se o host ESXi alternativo pode se conetar ao armazenamento
++
+Se você quiser montar em um host ESXi alternativo, certifique-se de que o host ESXi alternativo possa se conetar ao armazenamento e tenha o seguinte: ** Mesmo UID e GID que o host original ** mesmo dispositivo virtual para o plug-in do SnapCenter para a versão do VMware vSphere que o host original
+
+* Mapeie os iniciadores de armazenamento para ESXi
++
+Certifique-se de que os iniciadores do sistema de armazenamento estão mapeados para o ESXi.
+
+* Limpe os LUNs obsoletos
++
+Como o ESXi pode descobrir apenas um LUN único por datastore, a operação falhará se encontrar mais de um. Isso pode ocorrer se você iniciar uma operação de montagem antes que uma operação de montagem anterior seja concluída, ou se clonar manualmente LUNs ou se os clones não forem excluídos do armazenamento durante uma operação de desmontagem. Para evitar a descoberta de vários clones, você deve limpar todos os LUNs obsoletos no storage.
+
+
+
+.Sobre esta tarefa
+Uma operação de montagem pode falhar se a camada de storage do FabricPool onde o datastore está localizado não estiver disponível.
+
+.Passos
+. No cliente VMware vSphere, clique em *Menu* na barra de ferramentas e selecione *Storage* na lista suspensa.
+. Clique com o botão direito do Mouse em um datastore e selecione *NetApp SnapCenter* na lista suspensa e selecione *montar backup* na lista suspensa secundária.
+. Na página *Mount datastore*, selecione um local de backup e um local de backup (primário ou secundário) e clique em *Finish*.
+. Opcional: Para verificar se o datastore está montado, execute o seguinte:
++
+.. Clique em *Menu* na barra de ferramentas e selecione *armazenamento* na lista suspensa.
+.. O painel Navegador esquerdo exibe o datastore que você montou na parte superior da lista.
++
+Se você executar uma operação de conexão ou montagem em um volume de destino do SnapVault protegido por programações do SnapVault e estiver executando o ONTAP 8,3, poderá ver uma captura Instantânea adicional listada na tela de diálogo Anexar ou montar. Isso ocorre porque a operação de conexão ou montagem clona o volume de destino do SnapVault e o ONTAP atualiza o volume criando um novo Snapshot.
+
++
+Para evitar que novos snapshots sejam criados quando você clonar o volume, desative a programação ONTAP para o volume SnapVault. Os instantâneos existentes anteriormente não são eliminados.
+
+
+
+
